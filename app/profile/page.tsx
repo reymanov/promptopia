@@ -11,6 +11,7 @@ const MyProfile = () => {
   const router = useRouter();
   const { data: session } = useSession();
   const [posts, setPosts] = useState<Post[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const handleEdit = (post: Post) => {
     router.push(`/update-prompt?id=${post._id}`);
@@ -43,6 +44,7 @@ const MyProfile = () => {
         const data = await res.json();
 
         setPosts(data);
+        setIsLoading(false);
       } catch (e) {
         console.error(e);
       }
@@ -56,6 +58,7 @@ const MyProfile = () => {
       name="My"
       desc="Welcome to your personalized profile page"
       data={posts}
+      isLoading={isLoading}
       handleEdit={handleEdit}
       handleDelete={handleDelete}
     />

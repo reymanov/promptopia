@@ -5,11 +5,19 @@ interface Props {
   name: string;
   desc: string;
   data: Post[];
+  isLoading?: boolean;
   handleEdit?: (post: Post) => void;
   handleDelete?: (post: Post) => void;
 }
 
-const Profile = ({ name, desc, data, handleEdit, handleDelete }: Props) => {
+const Profile = ({
+  name,
+  desc,
+  data,
+  isLoading,
+  handleEdit,
+  handleDelete,
+}: Props) => {
   return (
     <section className="w-full">
       <h1 className="head_text text-left">
@@ -18,14 +26,18 @@ const Profile = ({ name, desc, data, handleEdit, handleDelete }: Props) => {
       <p className="desc text-left">{desc}</p>
 
       <div className="mt-10 prompt_layout">
-        {data.map((post) => (
-          <PromptCard
-            key={post._id}
-            post={post}
-            handleEdit={handleEdit}
-            handleDelete={handleDelete}
-          />
-        ))}
+        {isLoading ? (
+          <div className="flex justify-center items-center">Loading...</div>
+        ) : (
+          data.map((post) => (
+            <PromptCard
+              key={post._id}
+              post={post}
+              handleEdit={handleEdit}
+              handleDelete={handleDelete}
+            />
+          ))
+        )}
       </div>
     </section>
   );

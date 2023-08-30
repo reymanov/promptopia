@@ -2,24 +2,19 @@
 
 import Image from "next/image";
 import { Post } from "./Form";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useSession } from "next-auth/react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 interface Props {
   post: Post;
   handleEdit?: (post: Post) => void;
   handleDelete?: (post: Post) => void;
-  handleTagClick?: (tag: string) => void;
 }
 
-const PromptCard = ({
-  post,
-  handleEdit,
-  handleDelete,
-  handleTagClick,
-}: Props) => {
+const PromptCard = ({ post, handleEdit, handleDelete }: Props) => {
   const { data: session } = useSession();
+  const router = useRouter();
   const pathName = usePathname();
 
   const [copied, setCopied] = useState<string>("");
@@ -31,6 +26,10 @@ const PromptCard = ({
     setTimeout(() => {
       setCopied("");
     }, 3000);
+  };
+
+  const handleTagClick = (tag: string) => {
+    router.push(`/tag/${tag}`);
   };
 
   return (
@@ -73,9 +72,9 @@ const PromptCard = ({
       <p className="my-4 font-satoshi text-sm text-gray-700">{post.prompt}</p>
       <p
         className="font-inter text-sm blue_gradient cursor-pointer"
-        onClick={() => handleTagClick && handleTagClick(post.tag)}
+        onClick={() => handleTagClick(post.tag)}
       >
-        {post.tag}
+        #{post.tag}
       </p>
 
       {session?.user?.email === post.creator.email &&
